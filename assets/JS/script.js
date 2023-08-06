@@ -98,6 +98,19 @@ function renderWeather() {
     day4Humidity.textContent = 'Humidity: ' + day4.main.humidity + '%'
     day5Humidity.textContent = 'Humidity: ' + day5.main.humidity + '%'
 
+    // Renders icons
+    let icon1 = document.querySelector('#icon1')
+    let icon2 = document.querySelector('#icon2')
+    let icon3 = document.querySelector('#icon3')
+    let icon4 = document.querySelector('#icon4')
+    let icon5 = document.querySelector('#icon5')
+
+    icon1.src = `https://openweathermap.org/img/wn/${day1.weather[0].icon}@2x.png`
+    icon2.src = `https://openweathermap.org/img/wn/${day2.weather[0].icon}@2x.png`
+    icon3.src = `https://openweathermap.org/img/wn/${day3.weather[0].icon}@2x.png`
+    icon4.src = `https://openweathermap.org/img/wn/${day4.weather[0].icon}@2x.png`
+    icon5.src = `https://openweathermap.org/img/wn/${day5.weather[0].icon}@2x.png`
+
 }
 
 
