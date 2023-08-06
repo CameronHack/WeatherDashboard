@@ -11,25 +11,24 @@ let cityName;
 let previousCities = JSON.parse(localStorage.getItem('previousCities')) || []
 
 // I wanted the page to start off rendering a default location probably want to swap this for users current location
-fetchWeatherData(input.value = 'new york')
+fetchWeatherData(input.value = 'New York')
 
 // city search button
 search.addEventListener("click", function(e){
 
     if(e.target.matches("button")){
-
-        console.log(input.value)
         
         fetchWeatherData()
 
     }
 })
 
-// previous searched city button
+// previous city button
 cities.addEventListener("click", function(e){
 
     if(e.target.matches("button")){
 
+        // grabs the text from the button to search that city within fetchWeatherData
         input.value = e.target.textContent
         
         fetchWeatherData()
@@ -37,8 +36,7 @@ cities.addEventListener("click", function(e){
     }
 })
 
-
-
+// displays previously searched cities as buttons
 for (let i = 0; i < previousCities.length; i++) {
 
     let cityButton = document.createElement('button')
@@ -51,29 +49,24 @@ for (let i = 0; i < previousCities.length; i++) {
 
 }
 
-
-
-
 // grabs all the weather data from openweather
 function fetchWeatherData() {
 
+    // finds lon and lat of city that was inputed by the user
     let weatherGeoAPI = `https://api.openweathermap.org/geo/1.0/direct?q=${input.value}&limit=5&appid=e6b1fac811d8aab3c6db94ce80eb868d`
         
     fetch(weatherGeoAPI)
         .then(response => response.json())
         .then(citiesFound => {
             let firstCity = citiesFound[0]
-            console.log(firstCity.lat)
-            console.log(firstCity.lon)
-    
+            // pulls weather data based on lon and lat of the first matched city
             let weatherLocationAPI = `https://api.openweathermap.org/data/2.5/forecast?lat=${firstCity.lat}&lon=${firstCity.lon}&units=imperial&appid=e6b1fac811d8aab3c6db94ce80eb868d`
             return fetch(weatherLocationAPI)
         }) 
         .then(response => response.json())
         .then(data => {
-            // city with all the weather data
-            console.log(data)
 
+            // grabs the name of the city
             cityName = data.city.name
 
             // grabs weather info for each day
@@ -92,14 +85,10 @@ function fetchWeatherData() {
                 previousCities.push(cityName)
                 localStorage.setItem('previousCities', JSON.stringify(previousCities))
             }
-
         })
 }
 
-
-
-
-
+// renders all weather information gathered to the weather cards
 function renderWeather() {
     // Renders date
     let currentDayTitle = document.querySelector('#currentDay')
@@ -178,5 +167,3 @@ function renderWeather() {
     icon5.src = `https://openweathermap.org/img/wn/${day5.weather[0].icon}@2x.png`
 
 }
-
-
