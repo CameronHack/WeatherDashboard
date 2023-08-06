@@ -1,5 +1,5 @@
-let search = document.querySelector('#search')
-let input = document.querySelector('input')
+const search = document.querySelector('#search')
+const input = document.querySelector('input')
 let currentDay;
 let day1;
 let day2;
@@ -7,22 +7,42 @@ let day3;
 let day4;
 let day5;
 let cityName;
+let previousCities = JSON.parse(localStorage.getItem('previousCities')) || []
 
-
+// city search button
 search.addEventListener("click", function(e){
 
     if(e.target.matches("button")){
 
-        console.log('clicked')
         console.log(input.value)
         
         fetchWeatherData()
 
     }
-})    
+})
 
 
 
+
+
+
+for (let i = 0; i < previousCities.length; i++) {
+
+    let cityButton = document.createElement('button')
+
+    cityButton.textContent = previousCities[i]
+    cityButton.setAttribute('class', "list-group-item list-group-item-action")
+    cityButton.setAttribute('type', "button")
+
+    document.querySelector('#previousCities').append(cityButton)
+
+}
+
+
+
+
+
+// grabs all the weather data from openweather
 function fetchWeatherData() {
 
     let weatherGeoAPI = `https://api.openweathermap.org/geo/1.0/direct?q=${input.value}&limit=5&appid=e6b1fac811d8aab3c6db94ce80eb868d`
@@ -53,14 +73,11 @@ function fetchWeatherData() {
 
             renderWeather()
 
+            previousCities.push(cityName)
+
+            localStorage.setItem('previousCities', JSON.stringify(previousCities))
+
         })
-
-}
-
-
-
-function previousSearch() {
-
 }
 
 
