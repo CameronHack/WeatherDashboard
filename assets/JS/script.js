@@ -1,5 +1,6 @@
 const search = document.querySelector('#search')
 const input = document.querySelector('input')
+const cities = document.querySelector('#cities')
 let currentDay;
 let day1;
 let day2;
@@ -8,6 +9,9 @@ let day4;
 let day5;
 let cityName;
 let previousCities = JSON.parse(localStorage.getItem('previousCities')) || []
+
+// I wanted the page to start off rendering a default location probably want to swap this for users current location
+fetchWeatherData(input.value = 'new york')
 
 // city search button
 search.addEventListener("click", function(e){
@@ -21,8 +25,17 @@ search.addEventListener("click", function(e){
     }
 })
 
+// previous searched city button
+cities.addEventListener("click", function(e){
 
+    if(e.target.matches("button")){
 
+        input.value = e.target.textContent
+        
+        fetchWeatherData()
+
+    }
+})
 
 
 
@@ -34,10 +47,9 @@ for (let i = 0; i < previousCities.length; i++) {
     cityButton.setAttribute('class', "list-group-item list-group-item-action")
     cityButton.setAttribute('type', "button")
 
-    document.querySelector('#previousCities').append(cityButton)
+    cities.append(cityButton)
 
 }
-
 
 
 
@@ -64,6 +76,7 @@ function fetchWeatherData() {
 
             cityName = data.city.name
 
+            // grabs weather info for each day
             currentDay = data.list[0]
             day1 = data.list[8]
             day2 = data.list[16]
@@ -73,9 +86,12 @@ function fetchWeatherData() {
 
             renderWeather()
 
-            previousCities.push(cityName)
-
-            localStorage.setItem('previousCities', JSON.stringify(previousCities))
+            // compares city the user is trying to search with all current cities in local storage
+            if (previousCities.every(e => e !== cityName)){
+                // if city is not present in local storage then add the city name to local storage
+                previousCities.push(cityName)
+                localStorage.setItem('previousCities', JSON.stringify(previousCities))
+            }
 
         })
 }
@@ -85,7 +101,7 @@ function fetchWeatherData() {
 
 
 function renderWeather() {
-    // Renders the date in the title for each card
+    // Renders date
     let currentDayTitle = document.querySelector('#currentDay')
     let day1Title = document.querySelector('#day1')
     let day2Title = document.querySelector('#day2')
@@ -93,7 +109,8 @@ function renderWeather() {
     let day4Title = document.querySelector('#day4')
     let day5Title = document.querySelector('#day5')
     
-    currentDayTitle.textContent = cityName + ' ' + dayjs.unix(day1.dt).format("MM/DD/YY")
+    // for the first card we want to render the current city name plus the date
+    currentDayTitle.textContent = cityName + ' ' + dayjs.unix(day1.dt).format("(MM/DD/YY)")
     day1Title.textContent = dayjs.unix(day1.dt).format("MM/DD/YY")
     day2Title.textContent = dayjs.unix(day2.dt).format("MM/DD/YY")
     day3Title.textContent = dayjs.unix(day3.dt).format("MM/DD/YY")
