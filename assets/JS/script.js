@@ -16,38 +16,55 @@ search.addEventListener("click", function(e){
         console.log('clicked')
         console.log(input.value)
         
-        let weatherGeoAPI = `https://api.openweathermap.org/geo/1.0/direct?q=${input.value}&limit=5&appid=e6b1fac811d8aab3c6db94ce80eb868d`
-        
-        fetch(weatherGeoAPI)
-            .then(response => response.json())
-            .then(citiesFound => {
-                let firstCity = citiesFound[0]
-                console.log(firstCity.lat)
-                console.log(firstCity.lon)
-        
-                let weatherLocationAPI = `https://api.openweathermap.org/data/2.5/forecast?lat=${firstCity.lat}&lon=${firstCity.lon}&units=imperial&appid=e6b1fac811d8aab3c6db94ce80eb868d`
-                return fetch(weatherLocationAPI)
-            }) 
-            .then(response => response.json())
-            .then(data => {
-                // city with all the weather data
-                console.log(data)
-
-                cityName = data.city.name
-
-                currentDay = data.list[0]
-                day1 = data.list[8]
-                day2 = data.list[16]
-                day3 = data.list[24]
-                day4 = data.list[32]
-                day5 = data.list[39]
-
-                renderWeather()
-
-            })
+        fetchWeatherData()
 
     }
 })    
+
+
+
+function fetchWeatherData() {
+
+    let weatherGeoAPI = `https://api.openweathermap.org/geo/1.0/direct?q=${input.value}&limit=5&appid=e6b1fac811d8aab3c6db94ce80eb868d`
+        
+    fetch(weatherGeoAPI)
+        .then(response => response.json())
+        .then(citiesFound => {
+            let firstCity = citiesFound[0]
+            console.log(firstCity.lat)
+            console.log(firstCity.lon)
+    
+            let weatherLocationAPI = `https://api.openweathermap.org/data/2.5/forecast?lat=${firstCity.lat}&lon=${firstCity.lon}&units=imperial&appid=e6b1fac811d8aab3c6db94ce80eb868d`
+            return fetch(weatherLocationAPI)
+        }) 
+        .then(response => response.json())
+        .then(data => {
+            // city with all the weather data
+            console.log(data)
+
+            cityName = data.city.name
+
+            currentDay = data.list[0]
+            day1 = data.list[8]
+            day2 = data.list[16]
+            day3 = data.list[24]
+            day4 = data.list[32]
+            day5 = data.list[39]
+
+            renderWeather()
+
+        })
+
+}
+
+
+
+function previousSearch() {
+
+}
+
+
+
 
 
 function renderWeather() {
