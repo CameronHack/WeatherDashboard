@@ -12,6 +12,8 @@ let previousCities = JSON.parse(localStorage.getItem('previousCities')) || []
 
 // I wanted the page to start off rendering a default location probably want to swap this for users current location
 fetchWeatherData(input.value = 'New York')
+// display the previous city searches
+displayPreviousCities()
 
 // city search button
 search.addEventListener("click", function(e){
@@ -36,17 +38,25 @@ cities.addEventListener("click", function(e){
     }
 })
 
+
 // displays previously searched cities as buttons
-for (let i = 0; i < previousCities.length; i++) {
+function displayPreviousCities() {
 
-    let cityButton = document.createElement('button')
+    // reset the cities div to be empty
+    cities.innerHTML = ''
 
-    cityButton.textContent = previousCities[i]
-    cityButton.setAttribute('class', "list-group-item list-group-item-action")
-    cityButton.setAttribute('type', "button")
-
-    cities.append(cityButton)
-
+    // then for every stored city name make a button
+    for (let i = 0; i < previousCities.length; i++) {
+    
+        let cityButton = document.createElement('button')
+    
+        cityButton.textContent = previousCities[i]
+        cityButton.setAttribute('class', "list-group-item list-group-item-action")
+        cityButton.setAttribute('type', "button")
+    
+        cities.append(cityButton)
+    
+    }
 }
 
 // grabs all the weather data from openweather
@@ -84,6 +94,8 @@ function fetchWeatherData() {
                 // if city is not present in local storage then add the city name to local storage
                 previousCities.push(cityName)
                 localStorage.setItem('previousCities', JSON.stringify(previousCities))
+                // refreshes the previous cities buttons
+                displayPreviousCities()
             }
         })
 }
