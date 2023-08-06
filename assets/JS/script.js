@@ -10,7 +10,7 @@ let day5;
 let cityName;
 let previousCities = JSON.parse(localStorage.getItem('previousCities')) || []
 
-// I wanted the page to start off rendering a default location probably want to swap this for users current location
+// starts off rendering a default location
 fetchWeatherData(input.value = 'New York')
 // display the previous city searches
 displayPreviousCities()
